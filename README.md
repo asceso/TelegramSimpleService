@@ -45,19 +45,19 @@ namespace YourBot
 ```C#
 TelegramBotClient client;
 
-bool isCorrect = await CheckBotToken("YOUR_TOKEN");
+bool isCorrect = await telegramService.CheckBotToken("YOUR_TOKEN");
 if (!isCorrect)
   return;
-client = await CreateMainBot("YOUR_TOKEN");
+client = await telegramService.CreateMainBot("YOUR_TOKEN");
 ```
 
 ```C#
 TelegramBotClient debugger;
 
-bool isCorrect = await CheckBotToken("YOUR_TOKEN");
+bool isCorrect = await telegramService.CheckBotToken("YOUR_TOKEN");
 if (!isCorrect)
   return;
-debugger = await CreateDebugBot("YOUR_TOKEN");
+debugger = await telegramService.CreateDebugBot("YOUR_TOKEN");
 ```
 
 Для того чтобы прослушивать сообщения ботом необходимо создать класс имлементирующий интерфейс IUpdateHandler
@@ -78,17 +78,17 @@ public class Handler : IUpdateHandler
 }
 ```
 ```C#
-CancelationTokenSource cts = await StartMainBotReceiving(handler, new UpdateType[] { });
+CancelationTokenSource cts = await telegramService.StartMainBotReceiving(handler, new UpdateType[] { });
 ```
 ```C#
-CancelationTokenSource cts = await StartBotReceiving(client, handler, new UpdateType[] { });
+CancelationTokenSource cts = await telegramService.StartBotReceiving(client, handler, new UpdateType[] { });
 ```
 При необходимости можно ограничить принимаемые типы указав их в параметре
 Доступные типы [здесь](https://github.com/TelegramBots/Telegram.Bot/blob/master/src/Telegram.Bot/Types/Enums/UpdateType.cs)
 
 Пример:
 ```C#
-CancelationTokenSource cts = await StartMainBotReceiving(handler,
+CancelationTokenSource cts = await telegramService.StartMainBotReceiving(handler,
     new UpdateType[]
     {
       UpdateType.Message,
@@ -109,7 +109,7 @@ try
 }
 catch (Exception ex)
 {
-    await telegram.SendLog(id_for_debug, ex.Message); 
+    await telegramService.SendLog(id_for_debug, ex.Message); 
 }
 ```
 [Реализованные типы]:ru_implemented_types
@@ -118,22 +118,22 @@ catch (Exception ex)
 
 SendRemoveMessage - метод отправляет сообщение и удаляет клавиатуру
 ```C#
-await SendRemoveMessage(target_id, "text")
+await telegramService.SendRemoveMessage(target_id, "text")
 ```
 
 SendMessage - метод отправляет сообщение
 ```C#
-await SendMessage(target_id, "text")
+await telegramService.SendMessage(target_id, "text")
 ```
 
 SendMessageWithFile - метод отправляет сообщение с вложением, если указать параметр deleteFileWhenComplete = false файл остается на компьютере,
 по умолчанию = true, файл удаляется после отправки
 ```C#
-await SendMessageWithFile(target_id, "text", new FileStream("example.txt", FileMode.Open))
+await telegramService.SendMessageWithFile(target_id, "text", new FileStream("example.txt", FileMode.Open))
 ```
 
 SendMessageWithKeyboard - метод отправляет сообщение с клавиатурой
 Метод перегружен и принимает ReplyKeyboardMarkup или InlineKeyboardMarkup
 ```C#
-await SendMessageWithKeyboard(target_id, "text", markup)
+await telegramService.SendMessageWithKeyboard(target_id, "text", markup)
 ```
