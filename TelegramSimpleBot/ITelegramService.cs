@@ -33,8 +33,16 @@ namespace TelegramSimpleBot
         /// </summary>
         /// <param name="updateHandler">handler for updates</param>
         /// <param name="allowedTypes">allowed update types</param>
-        /// <returns></returns>
+        /// <returns>cancelation token</returns>
         Task<CancellationTokenSource> StartMainBotReceiving(IUpdateHandler updateHandler, params UpdateType[] allowedTypes);
+        /// <summary>
+        /// Start receiving for other bot
+        /// </summary>
+        /// <param name="client">bot client for handlers</param>
+        /// <param name="updateHandler">handler for updates</param>
+        /// <param name="allowedTypes">allowed update types</param>
+        /// <returns>cancelation token</returns>
+        Task<CancellationTokenSource> StartBotReceiving(TelegramBotClient client, IUpdateHandler updateHandler, params UpdateType[] allowedTypes);
         /// <summary>
         /// Send debug message from debugger bot
         /// </summary>
@@ -48,14 +56,14 @@ namespace TelegramSimpleBot
         /// <param name="uid">uid user</param>
         /// <param name="message">message</param>
         /// <returns></returns>
-        Task SendRemoveMessage(long uid, string message);
+        Task SendRemoveMessage(long uid, string message, TelegramBotClient client = null);
         /// <summary>
         /// Send simple text message
         /// </summary>
         /// <param name="uid">uid user</param>
         /// <param name="message">message</param>
         /// <returns></returns>
-        Task SendMessage(long uid, string message);
+        Task SendMessage(long uid, string message, TelegramBotClient client = null);
         /// <summary>
         /// Send message with file
         /// </summary>
@@ -65,7 +73,7 @@ namespace TelegramSimpleBot
         /// <param name="fileName">filename in telegram</param>
         /// <param name="deleteFileWhenComplete">delete file when send complete</param>
         /// <returns></returns>
-        Task SendMessageWithFile(long uid, string message, FileStream fs, string fileName, bool deleteFileWhenComplete = true);
+        Task SendMessageWithFile(long uid, string message, FileStream fs, string fileName, bool deleteFileWhenComplete = true, TelegramBotClient client = null);
         /// <summary>
         /// Send message with keyboard reply
         /// </summary>
@@ -73,7 +81,7 @@ namespace TelegramSimpleBot
         /// <param name="message">message</param>
         /// <param name="markup">ReplyKeyboardMarkup</param>
         /// <returns></returns>
-        Task SendMessageWithKeyboard(long uid, string message, ReplyKeyboardMarkup markup);
+        Task SendMessageWithKeyboard(long uid, string message, ReplyKeyboardMarkup markup, TelegramBotClient client = null);
         /// <summary>
         /// Send message with inline buttons
         /// </summary>
@@ -81,6 +89,6 @@ namespace TelegramSimpleBot
         /// <param name="message">message</param>
         /// <param name="markup">InlineKeyboardMarkup</param>
         /// <returns></returns>
-        Task SendMessageWithKeyboard(long uid, string message, InlineKeyboardMarkup markup);
+        Task SendMessageWithKeyboard(long uid, string message, InlineKeyboardMarkup markup, TelegramBotClient client = null);
     }
 }

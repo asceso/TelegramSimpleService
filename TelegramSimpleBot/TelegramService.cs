@@ -68,6 +68,23 @@ namespace TelegramSimpleBot
             }
             return null;
         }
+        public Task<CancellationTokenSource> StartBotReceiving(TelegramBotClient client, IUpdateHandler updateHandler, params UpdateType[] allowedTypes)
+        {
+            if (client != null)
+            {
+                CancellationTokenSource cts = new CancellationTokenSource();
+                client.StartReceiving(
+                    updateHandler,
+                    receiverOptions: new ReceiverOptions()
+                    {
+                        AllowedUpdates = allowedTypes
+                    },
+                    cancellationToken: cts.Token
+                    );
+                return Task.FromResult(cts);
+            }
+            return null;
+        }
         public async Task SendLog(long uid, string message)
         {
             try
@@ -78,18 +95,70 @@ namespace TelegramSimpleBot
             {
             }
         }
-        public async Task SendRemoveMessage(long uid, string message) => await Client.SendTextMessageAsync(uid, message, replyMarkup: new ReplyKeyboardRemove());
-        public async Task SendMessage(long uid, string message) => await Client.SendTextMessageAsync(uid, message, ParseMode.Html);
-        public async Task SendMessageWithFile(long uid, string message, FileStream fs, string fileName, bool deleteFileWhenComplete = true)
+        public async Task SendRemoveMessage(long uid, string message, TelegramBotClient client = null)
         {
-            await Client.SendDocumentAsync(uid, new Telegram.Bot.Types.InputFiles.InputOnlineFile(fs, fileName), caption: message);
-            fs.Close();
-            if (deleteFileWhenComplete)
+            if (client != null)
             {
-                System.IO.File.Delete(fs.Name);
+                await client.SendTextMessageAsync(uid, message, replyMarkup: new ReplyKeyboardRemove());
+            }
+            else if (Client != null)
+            {
+                await Client.SendTextMessageAsync(uid, message, replyMarkup: new ReplyKeyboardRemove());
             }
         }
-        public async Task SendMessageWithKeyboard(long uid, string message, ReplyKeyboardMarkup markup) => await Client.SendTextMessageAsync(uid, message, ParseMode.Html, replyMarkup: markup);
-        public async Task SendMessageWithKeyboard(long uid, string message, InlineKeyboardMarkup markup) => await Client.SendTextMessageAsync(uid, message, ParseMode.Html, replyMarkup: markup);
+        public async Task SendMessage(long uid, string message, TelegramBotClient client = null)
+        {
+            if (client != null)
+            {
+                await client.SendTextMessageAsync(uid, message, ParseMode.Html);
+            }
+            else if (Client != null)
+            {
+                await Client.SendTextMessageAsync(uid, message, ParseMode.Html);
+            }
+        }
+        public async Task SendMessageWithFile(long uid, string message, FileStream fs, string fileName, bool deleteFileWhenComplete = true, TelegramBotClient client = null)
+        {
+            if (client != null)
+            {
+                await client.SendDocumentAsync(uid, new Telegram.Bot.Types.InputFiles.InputOnlineFile(fs, fileName), caption: message);
+                fs.Close();
+                if (deleteFileWhenComplete)
+                {
+                    File.Delete(fs.Name);
+                }
+            }
+            else if (Client != null)
+            {
+                await Client.SendDocumentAsync(uid, new Telegram.Bot.Types.InputFiles.InputOnlineFile(fs, fileName), caption: message);
+                fs.Close();
+                if (deleteFileWhenComplete)
+                {
+                    File.Delete(fs.Name);
+                }
+            }
+        }
+        public async Task SendMessageWithKeyboard(long uid, string message, ReplyKeyboardMarkup markup, TelegramBotClient client = null)
+        {
+            if (client != null)
+            {
+                await client.SendTextMessageAsync(uid, message, ParseMode.Html, replyMarkup: markup);
+            }
+            else if (Client != null)
+            {
+                await Client.SendTextMessageAsync(uid, message, ParseMode.Html, replyMarkup: markup);
+            }
+        }
+        public async Task SendMessageWithKeyboard(long uid, string message, InlineKeyboardMarkup markup, TelegramBotClient client = null)
+        {
+            if (client != null)
+            {
+                await client.SendTextMessageAsync(uid, message, ParseMode.Html, replyMarkup: markup);
+            }
+            else if (Client != null)
+            {
+                await Client.SendTextMessageAsync(uid, message, ParseMode.Html, replyMarkup: markup);
+            }
+        }
     }
 }
