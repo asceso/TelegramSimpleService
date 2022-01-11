@@ -51,10 +51,19 @@ namespace TelegramSimpleService
         /// <returns></returns>
         Task SendLog(long uid, string message);
         /// <summary>
+        /// Delete message from chat
+        /// </summary>
+        /// <param name="chatId">id chat</param>
+        /// <param name="messageId">id message</param>
+        /// <param name="client">client may be null</param>
+        /// <returns></returns>
+        Task DeleteMessage(long chatId, int messageId, TelegramBotClient client = null);
+        /// <summary>
         /// Send clear keyboard message
         /// </summary>
         /// <param name="uid">uid user</param>
         /// <param name="message">message</param>
+        /// <param name="client">client may be null</param>
         /// <returns></returns>
         Task SendRemoveMessage(long uid, string message, TelegramBotClient client = null);
         /// <summary>
@@ -62,6 +71,7 @@ namespace TelegramSimpleService
         /// </summary>
         /// <param name="uid">uid user</param>
         /// <param name="message">message</param>
+        /// <param name="client">client may be null</param>
         /// <returns></returns>
         Task SendMessage(long uid, string message, TelegramBotClient client = null);
         /// <summary>
@@ -72,6 +82,7 @@ namespace TelegramSimpleService
         /// <param name="fs">file stream of file FileMode.Open</param>
         /// <param name="fileName">filename in telegram</param>
         /// <param name="deleteFileWhenComplete">delete file when send complete</param>
+        /// <param name="client">client may be null</param>
         /// <returns></returns>
         Task SendMessageWithFile(long uid, string message, FileStream fs, string fileName, bool deleteFileWhenComplete = true, TelegramBotClient client = null);
         /// <summary>
@@ -80,6 +91,7 @@ namespace TelegramSimpleService
         /// <param name="uid">uid user</param>
         /// <param name="message">message</param>
         /// <param name="markup">ReplyKeyboardMarkup</param>
+        /// <param name="client">client may be null</param>
         /// <returns></returns>
         Task SendMessageWithKeyboard(long uid, string message, ReplyKeyboardMarkup markup, TelegramBotClient client = null);
         /// <summary>
@@ -88,6 +100,7 @@ namespace TelegramSimpleService
         /// <param name="uid">uid user</param>
         /// <param name="message">message</param>
         /// <param name="markup">InlineKeyboardMarkup</param>
+        /// <param name="client">client may be null</param>
         /// <returns></returns>
         Task SendMessageWithKeyboard(long uid, string message, InlineKeyboardMarkup markup, TelegramBotClient client = null);
     }

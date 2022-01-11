@@ -19,7 +19,7 @@ namespace TelegramSimpleService
             try
             {
                 var client = new TelegramBotClient(token);
-                var bot = await Client.GetMeAsync();
+                var bot = await client.GetMeAsync();
                 return true;
             }
             catch (Exception)
@@ -93,6 +93,17 @@ namespace TelegramSimpleService
             }
             catch (Exception)
             {
+            }
+        }
+        public async Task DeleteMessage(long chatId, int messageId, TelegramBotClient client = null)
+        {
+            if (client != null)
+            {
+                await client.DeleteMessageAsync(chatId, messageId);
+            }
+            else if (Client != null)
+            {
+                await Client.DeleteMessageAsync(chatId, messageId);
             }
         }
         public async Task SendRemoveMessage(long uid, string message, TelegramBotClient client = null)
