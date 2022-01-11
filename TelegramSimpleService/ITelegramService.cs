@@ -6,7 +6,7 @@ using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace TelegramSimpleBot
+namespace TelegramSimpleService
 {
     public interface ITelegramService
     {
