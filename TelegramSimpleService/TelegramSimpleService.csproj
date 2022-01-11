@@ -10,6 +10,8 @@
     <PackageProjectUrl>https://github.com/asceso/TelegramSimpleService</PackageProjectUrl>
     <PackageIcon>package.png</PackageIcon>
     <PackageIconUrl />
+    <FileVersion>1.0.0.1</FileVersion>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
