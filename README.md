@@ -18,7 +18,8 @@
 
 [Руководство использования]:ru_getting_started
 ## Руководство использования:
-Для начала необходимо получить token от BotFather [Инструкция](https://core.telegram.org/bots#6-botfather)</br>
+Сервис написан на основе [TelegramBot](https://github.com/TelegramBots/Telegram.Bot)</br>
+Для начала работы с ботом необходимо получить token от BotFather [Инструкция](https://core.telegram.org/bots#6-botfather)</br>
 
 [Инициализация сервиса]:ru_service_init
 ### Инициализация сервиса
@@ -83,7 +84,7 @@ CancelationTokenSource cts = await StartMainBotReceiving(handler, new UpdateType
 CancelationTokenSource cts = await StartBotReceiving(client, handler, new UpdateType[] { });
 ```
 При необходимости можно ограничить принимаемые типы указав их в параметре
-Доступные типы [здесь](https://core.telegram.org/bots/api#available-types)
+Доступные типы [здесь](https://github.com/TelegramBots/Telegram.Bot/blob/master/src/Telegram.Bot/Types/Enums/UpdateType.cs)
 
 Пример:
 ```C#
