@@ -116,6 +116,11 @@ catch (Exception ex)
 ### Реализованные типы
 Ниже указаны реализованные в сервисе типы сообщений (если последним параметром добавить клиент TelegramBotClient сообщение будет отправлено от него)
 
+DeleteMessage - метод удаляет сообщение из чата
+```C#
+await telegramService.DeleteMessage(chat_id, message_id)
+```
+
 SendRemoveMessage - метод отправляет сообщение и удаляет клавиатуру
 ```C#
 await telegramService.SendRemoveMessage(target_id, "text")
