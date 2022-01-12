@@ -50,6 +50,8 @@ namespace TelegramSimpleService
                 return null;
             }
         }
+        public TelegramBotClient GetMainBot() => Client;
+        public TelegramBotClient GetDebugBot() => Debugger;
         public CancellationTokenSource StartMainBotReceiving(IUpdateHandler updateHandler, params UpdateType[] allowedTypes)
         {
             if (Client != null)

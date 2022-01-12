@@ -29,6 +29,16 @@ namespace TelegramSimpleService
         /// <returns>TelegramBotClient</returns>
         TelegramBotClient CreateOtherBot(string token);
         /// <summary>
+        /// Get main bot
+        /// </summary>
+        /// <returns>if bot is null return null</returns>
+        TelegramBotClient GetMainBot();
+        /// <summary>
+        /// Get debug bot
+        /// </summary>
+        /// <returns>if bot is null return null</returns>
+        TelegramBotClient GetDebugBot();
+        /// <summary>
         /// Start receiving for main bot
         /// </summary>
         /// <param name="updateHandler">handler for updates</param>
