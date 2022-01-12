@@ -14,44 +14,43 @@ namespace TelegramSimpleService
         private static TelegramBotClient Client;
         private static TelegramBotClient Debugger;
 
-        public async Task<bool> CheckBotToken(string token)
-        {
-            try
-            {
-                var client = new TelegramBotClient(token);
-                var bot = await client.GetMeAsync();
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-        public Task<TelegramBotClient> CreateMainBot(string token)
+        public TelegramBotClient CreateMainBot(string token)
         {
             try
             {
                 Client = new TelegramBotClient(token);
-                return Task.FromResult(Client);
+                return Client;
             }
             catch (Exception)
             {
                 return null;
             }
         }
-        public Task<TelegramBotClient> CreateDebugBot(string token)
+        public TelegramBotClient CreateDebugBot(string token)
         {
             try
             {
                 Debugger = new TelegramBotClient(token);
-                return Task.FromResult(Debugger);
+                return Debugger;
             }
             catch (Exception)
             {
                 return null;
             }
         }
-        public Task<CancellationTokenSource> StartMainBotReceiving(IUpdateHandler updateHandler, params UpdateType[] allowedTypes)
+        public TelegramBotClient CreateOtherBot(string token)
+        {
+            try
+            {
+                TelegramBotClient client = new TelegramBotClient(token);
+                return client;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public CancellationTokenSource StartMainBotReceiving(IUpdateHandler updateHandler, params UpdateType[] allowedTypes)
         {
             if (Client != null)
             {
@@ -64,11 +63,11 @@ namespace TelegramSimpleService
                     },
                     cancellationToken: cts.Token
                     );
-                return Task.FromResult(cts);
+                return cts;
             }
             return null;
         }
-        public Task<CancellationTokenSource> StartBotReceiving(TelegramBotClient client, IUpdateHandler updateHandler, params UpdateType[] allowedTypes)
+        public CancellationTokenSource StartBotReceiving(TelegramBotClient client, IUpdateHandler updateHandler, params UpdateType[] allowedTypes)
         {
             if (client != null)
             {
@@ -81,11 +80,25 @@ namespace TelegramSimpleService
                     },
                     cancellationToken: cts.Token
                     );
-                return Task.FromResult(cts);
+                return cts;
             }
             return null;
         }
-        public async Task SendLog(long uid, string message)
+
+        public async Task<bool> CheckBotTokenAsync(string token)
+        {
+            try
+            {
+                var client = new TelegramBotClient(token);
+                var bot = await client.GetMeAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        public async Task SendLogAsync(long uid, string message)
         {
             try
             {
@@ -95,7 +108,7 @@ namespace TelegramSimpleService
             {
             }
         }
-        public async Task DeleteMessage(long chatId, int messageId, TelegramBotClient client = null)
+        public async Task DeleteMessageAsync(long chatId, int messageId, TelegramBotClient client = null)
         {
             if (client != null)
             {
@@ -106,7 +119,7 @@ namespace TelegramSimpleService
                 await Client.DeleteMessageAsync(chatId, messageId);
             }
         }
-        public async Task SendRemoveMessage(long uid, string message, TelegramBotClient client = null)
+        public async Task SendRemoveMessageAsync(long uid, string message, TelegramBotClient client = null)
         {
             if (client != null)
             {
@@ -117,7 +130,7 @@ namespace TelegramSimpleService
                 await Client.SendTextMessageAsync(uid, message, replyMarkup: new ReplyKeyboardRemove());
             }
         }
-        public async Task SendMessage(long uid, string message, TelegramBotClient client = null)
+        public async Task SendMessageAsync(long uid, string message, TelegramBotClient client = null)
         {
             if (client != null)
             {
@@ -128,7 +141,7 @@ namespace TelegramSimpleService
                 await Client.SendTextMessageAsync(uid, message, ParseMode.Html);
             }
         }
-        public async Task SendMessageWithFile(long uid, string message, FileStream fs, string fileName, bool deleteFileWhenComplete = true, TelegramBotClient client = null)
+        public async Task SendMessageWithFileAsync(long uid, string message, FileStream fs, string fileName, bool deleteFileWhenComplete = true, TelegramBotClient client = null)
         {
             if (client != null)
             {
@@ -149,7 +162,7 @@ namespace TelegramSimpleService
                 }
             }
         }
-        public async Task SendMessageWithKeyboard(long uid, string message, ReplyKeyboardMarkup markup, TelegramBotClient client = null)
+        public async Task SendMessageWithKeyboardAsync(long uid, string message, ReplyKeyboardMarkup markup, TelegramBotClient client = null)
         {
             if (client != null)
             {
@@ -160,7 +173,7 @@ namespace TelegramSimpleService
                 await Client.SendTextMessageAsync(uid, message, ParseMode.Html, replyMarkup: markup);
             }
         }
-        public async Task SendMessageWithKeyboard(long uid, string message, InlineKeyboardMarkup markup, TelegramBotClient client = null)
+        public async Task SendMessageWithKeyboardAsync(long uid, string message, InlineKeyboardMarkup markup, TelegramBotClient client = null)
         {
             if (client != null)
             {

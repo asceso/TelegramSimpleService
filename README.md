@@ -49,7 +49,7 @@ TelegramBotClient client;
 bool isCorrect = await telegramService.CheckBotToken("YOUR_TOKEN");
 if (!isCorrect)
   return;
-client = await telegramService.CreateMainBot("YOUR_TOKEN");
+client = telegramService.CreateMainBot("YOUR_TOKEN");
 ```
 
 ```C#
@@ -58,7 +58,16 @@ TelegramBotClient debugger;
 bool isCorrect = await telegramService.CheckBotToken("YOUR_TOKEN");
 if (!isCorrect)
   return;
-debugger = await telegramService.CreateDebugBot("YOUR_TOKEN");
+debugger = telegramService.CreateDebugBot("YOUR_TOKEN");
+```
+
+```C#
+TelegramBotClient other;
+
+bool isCorrect = await telegramService.CheckBotToken("YOUR_TOKEN");
+if (!isCorrect)
+  return;
+other = telegramService.CreateOtherBot("YOUR_TOKEN");
 ```
 
 Для того чтобы прослушивать сообщения ботом необходимо создать класс имплементирующий интерфейс IUpdateHandler
@@ -79,17 +88,17 @@ public class Handler : IUpdateHandler
 }
 ```
 ```C#
-CancelationTokenSource cts = await telegramService.StartMainBotReceiving(handler, new UpdateType[] { });
+CancelationTokenSource cts = telegramService.StartMainBotReceiving(handler, new UpdateType[] { });
 ```
 ```C#
-CancelationTokenSource cts = await telegramService.StartBotReceiving(client, handler, new UpdateType[] { });
+CancelationTokenSource cts = telegramService.StartBotReceiving(client, handler, new UpdateType[] { });
 ```
 При необходимости можно ограничить принимаемые типы указав их в параметре
 Доступные типы [здесь](https://github.com/TelegramBots/Telegram.Bot/blob/master/src/Telegram.Bot/Types/Enums/UpdateType.cs)
 
 Пример:
 ```C#
-CancelationTokenSource cts = await telegramService.StartMainBotReceiving(handler,
+CancelationTokenSource cts = telegramService.StartMainBotReceiving(handler,
     new UpdateType[]
     {
       UpdateType.Message,
@@ -110,7 +119,7 @@ try
 }
 catch (Exception ex)
 {
-    await telegramService.SendLog(id_for_debug, ex.Message); 
+    await telegramService.SendLogAsync(id_for_debug, ex.Message); 
 }
 ```
 [Реализованные типы]:ru_implemented_types
@@ -119,29 +128,29 @@ catch (Exception ex)
 
 DeleteMessage - метод удаляет сообщение из чата
 ```C#
-await telegramService.DeleteMessage(chat_id, message_id)
+await telegramService.DeleteMessageAsync(chat_id, message_id)
 ```
 
 SendRemoveMessage - метод отправляет сообщение и удаляет клавиатуру
 ```C#
-await telegramService.SendRemoveMessage(target_id, "text")
+await telegramService.SendRemoveMessageAsync(target_id, "text")
 ```
 
 SendMessage - метод отправляет сообщение
 ```C#
-await telegramService.SendMessage(target_id, "text")
+await telegramService.SendMessageAsync(target_id, "text")
 ```
 
 SendMessageWithFile - метод отправляет сообщение с вложением, если указать параметр deleteFileWhenComplete = false файл остается на компьютере,
 по умолчанию = true, файл удаляется после отправки
 ```C#
-await telegramService.SendMessageWithFile(target_id, "text", new FileStream("example.txt", FileMode.Open))
+await telegramService.SendMessageWithFileAsync(target_id, "text", new FileStream("example.txt", FileMode.Open))
 ```
 
 SendMessageWithKeyboard - метод отправляет сообщение с клавиатурой
 Метод перегружен и принимает ReplyKeyboardMarkup или InlineKeyboardMarkup
 ```C#
-await telegramService.SendMessageWithKeyboard(target_id, "text", markup)
+await telegramService.SendMessageWithKeyboardAsync(target_id, "text", markup)
 ```
 
 [Клавиатуры]:ru_keyboards
@@ -165,28 +174,28 @@ namespace YourBot
 Метод возвращает true при успешном выполнении
 
 ```C#
-await keyboardService.SetStoreFileName("new_reply_keyboards_name.json", "new_inline_keyboards_name.json")
+keyboardService.SetStoreFileName("new_reply_keyboards_name.json", "new_inline_keyboards_name.json")
 ```
 
 Для сохранения клавиатур используется метод SaveKeyboards(keyboards) возвращает true в случае успеха
 
 ```C#
-await keyboardService.SaveKeyboards(keyboards);
+await keyboardService.SaveKeyboardsAsync(keyboards);
 ```
 
-Для загрузки сохраненных клавиатур используется метод LoadKeyboards(KeyboardType) и выбирается какую клавиатуру необходимо загрузить</br>
+Для загрузки сохраненных клавиатур используется метод LoadKeyboardsAsync(KeyboardType) и выбирается какую клавиатуру необходимо загрузить</br>
 Метод возвращает object который нужно привести к типу нужной клавиатуры
 
 ```C#
-Dictionary<string, ReplyKeyboardMarkup> loaded_r_keys = (Dictionary<string, ReplyKeyboardMarkup>)await keyboardService.LoadKeyboards(KeyboardType.Reply);
-Dictionary<string, InlineKeyboardMarkup> loaded_i_keys = (Dictionary<string, InlineKeyboardMarkup>)await keyboardService.LoadKeyboards(KeyboardType.Inline);
+Dictionary<string, ReplyKeyboardMarkup> loaded_r_keys = (Dictionary<string, ReplyKeyboardMarkup>)await keyboardService.LoadKeyboardsAsync(KeyboardType.Reply);
+Dictionary<string, InlineKeyboardMarkup> loaded_i_keys = (Dictionary<string, InlineKeyboardMarkup>)await keyboardService.LoadKeyboardsAsync(KeyboardType.Inline);
 ```
 
 Для генерации inline клавиатуры используйте метод GenerateInlineKeyboard(List<Tuple<string, string>>) </br>
 Для каждого элемента списка используется тип Tuple где 1 элемент текст кнопки 2 элемент CallbackData
 
 ```C#
-InlineKeyboardMarkup keyboard = await keyboardService.GenerateInlineKeyboard(myCollection);
+InlineKeyboardMarkup keyboard = keyboardService.GenerateInlineKeyboard(myCollection);
 ```
 
 Для генерации так же доступен расширенный метод GeneratePagedInlineKeyboard, работает по принципу GenerateInlineKeyboard с разницей в параметрах</br>
@@ -195,8 +204,8 @@ InlineKeyboardMarkup keyboard = await keyboardService.GenerateInlineKeyboard(myC
 
 ```C#
 //Загрузка страницы 1, кол-во элементов на странице 5
-InlineKeyboardMarkup keyboard = await keyboardService.GeneratePagedInlineKeyboard(myCollection, 1, 5, new Tuple<string, string>("Btn1", "Back"), new Tuple<string, string>("Btn2", "Forward"));
+InlineKeyboardMarkup keyboard = keyboardService.GeneratePagedInlineKeyboard(myCollection, 1, 5, new Tuple<string, string>("Btn1", "Back"), new Tuple<string, string>("Btn2", "Forward"));
 
 //Загрузка страницы 3, кол-во элементов на странице 5
-InlineKeyboardMarkup keyboard = await keyboardService.GeneratePagedInlineKeyboard(myCollection, 3, 5, new Tuple<string, string>("Btn1", "Back"), new Tuple<string, string>("Btn2", "Forward"));
+InlineKeyboardMarkup keyboard = keyboardService.GeneratePagedInlineKeyboard(myCollection, 3, 5, new Tuple<string, string>("Btn1", "Back"), new Tuple<string, string>("Btn2", "Forward"));
 ```

@@ -19,31 +19,53 @@ namespace TelegramSimpleService
         /// <param name="replyKeyboards">new name for r_keys.json</param>
         /// <param name="inlineKeyboards">new name for i_keys.json</param>
         /// <returns>true when complete</returns>
-        Task<bool> SetStoreFileName(string replyKeyboards, string inlineKeyboards);
+        bool SetStoreFileName(string replyKeyboards, string inlineKeyboards);
+
         /// <summary>
         /// Method save reply keyboards to json file
         /// </summary>
         /// <param name="keyboards">dictionary with keyboards, key is name for keyboard</param>
         /// <returns>true when complete</returns>
-        Task<bool> SaveKeyboards(Dictionary<string, ReplyKeyboardMarkup> keyboards);
+        bool SaveKeyboards(Dictionary<string, ReplyKeyboardMarkup> keyboards);
+        /// <summary>
+        /// Method save reply keyboards to json file
+        /// </summary>
+        /// <param name="keyboards">dictionary with keyboards, key is name for keyboard</param>
+        /// <returns>true when complete</returns>
+        Task<bool> SaveKeyboardsAsync(Dictionary<string, ReplyKeyboardMarkup> keyboards);
+
         /// <summary>
         /// Method save inline keyboards to json file
         /// </summary>
         /// <param name="keyboards">dictionary with keyboards, key is name for keyboard</param>
         /// <returns>true when complete</returns>
-        Task<bool> SaveKeyboards(Dictionary<string, InlineKeyboardMarkup> keyboards);
+        bool SaveKeyboards(Dictionary<string, InlineKeyboardMarkup> keyboards);
+        /// <summary>
+        /// Method save inline keyboards to json file
+        /// </summary>
+        /// <param name="keyboards">dictionary with keyboards, key is name for keyboard</param>
+        /// <returns>true when complete</returns>
+        Task<bool> SaveKeyboardsAsync(Dictionary<string, InlineKeyboardMarkup> keyboards);
+        
         /// <summary>
         /// Method load keyboards from file
         /// </summary>
         /// <param name="keyboardType">keyboard type</param>
         /// <returns>Dictionary<string, ReplyKeyboardMarkup> or Dictionary<string, InlineKeyboardMarkup></returns>
-        Task<object> LoadKeyboards(KeyboardType keyboardType);
+        object LoadKeyboards(KeyboardType keyboardType);
+        /// <summary>
+        /// Method load keyboards from file
+        /// </summary>
+        /// <param name="keyboardType">keyboard type</param>
+        /// <returns>Dictionary<string, ReplyKeyboardMarkup> or Dictionary<string, InlineKeyboardMarkup></returns>
+        Task<object> LoadKeyboardsAsync(KeyboardType keyboardType);
+
         /// <summary>
         /// Generating inline keyboard with list of tuple
         /// </summary>
         /// <param name="tupleTextData">tuple element item1 is text for button item2 is callback data</param>
         /// <returns>Inline keyboard markup</returns>
-        Task<InlineKeyboardMarkup> GenerateInlineKeyboard(List<Tuple<string, string>> tupleTextData);
+        InlineKeyboardMarkup GenerateInlineKeyboard(List<Tuple<string, string>> tupleTextData);
         /// <summary>
         /// Generate paged list for big list collection
         /// </summary>
@@ -53,6 +75,6 @@ namespace TelegramSimpleService
         /// <param name="backButton">back button text and callback data</param>
         /// <param name="forwardButton">forward button text and callback data</param>
         /// <returns>inline keyboard button with pages</returns>
-        Task<InlineKeyboardMarkup> GeneratePagedInlineKeyboard(List<Tuple<string, string>> tupleTextData, int pageNumber, int countInPage, Tuple<string, string> backButton, Tuple<string, string> forwardButton);
+        InlineKeyboardMarkup GeneratePagedInlineKeyboard(List<Tuple<string, string>> tupleTextData, int pageNumber, int countInPage, Tuple<string, string> backButton, Tuple<string, string> forwardButton);
     }
 }

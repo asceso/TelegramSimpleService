@@ -18,6 +18,7 @@ namespace TelegramSimpleService
             replyFileName = Environment.CurrentDirectory + "/r_keys.json";
             inlineFileName = Environment.CurrentDirectory + "/i_keys.json";
         }
+
         public string GetFileName(KeyboardType keyboardType)
         {
             return keyboardType switch
@@ -27,20 +28,35 @@ namespace TelegramSimpleService
                 _ => string.Empty,
             };
         }
-        public Task<bool> SetStoreFileName(string replyKeyboards, string inlineKeyboards)
+        public bool SetStoreFileName(string replyKeyboards, string inlineKeyboards)
         {
             try
             {
                 replyFileName = Environment.CurrentDirectory + $"/{replyKeyboards}";
                 inlineFileName = Environment.CurrentDirectory + $"/{inlineKeyboards}";
-                return Task.FromResult(true);
+                return true;
             }
             catch (Exception)
             {
-                return Task.FromResult(false);
+                return false;
             }
         }
-        public async Task<bool> SaveKeyboards(Dictionary<string, ReplyKeyboardMarkup> keyboards)
+
+        public bool SaveKeyboards(Dictionary<string, ReplyKeyboardMarkup> keyboards)
+        {
+            try
+            {
+                using StreamWriter writer = new StreamWriter(replyFileName);
+                writer.Write(JsonConvert.SerializeObject(keyboards, Formatting.Indented));
+                writer.Close();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> SaveKeyboardsAsync(Dictionary<string, ReplyKeyboardMarkup> keyboards)
         {
             try
             {
@@ -54,7 +70,22 @@ namespace TelegramSimpleService
                 return false;
             }
         }
-        public async Task<bool> SaveKeyboards(Dictionary<string, InlineKeyboardMarkup> keyboards)
+
+        public bool SaveKeyboards(Dictionary<string, InlineKeyboardMarkup> keyboards)
+        {
+            try
+            {
+                using StreamWriter writer = new StreamWriter(inlineFileName);
+                writer.WriteAsync(JsonConvert.SerializeObject(keyboards, Formatting.Indented));
+                writer.Close();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> SaveKeyboardsAsync(Dictionary<string, InlineKeyboardMarkup> keyboards)
         {
             try
             {
@@ -68,7 +99,48 @@ namespace TelegramSimpleService
                 return false;
             }
         }
-        public async Task<object> LoadKeyboards(KeyboardType keyboardType)
+
+        public object LoadKeyboards(KeyboardType keyboardType)
+        {
+            try
+            {
+                switch (keyboardType)
+                {
+                    case KeyboardType.Reply:
+                        {
+                            Dictionary<string, ReplyKeyboardMarkup> keys;
+                            using (StreamReader reader = new StreamReader(replyFileName))
+                            {
+                                string buffer = reader.ReadToEnd();
+                                reader.Close();
+                                keys = JsonConvert.DeserializeObject<Dictionary<string, ReplyKeyboardMarkup>>(buffer);
+                            }
+                            foreach (var key in keys.Values)
+                            {
+                                key.ResizeKeyboard = true;
+                            }
+                            return keys;
+                        }
+                    case KeyboardType.Inline:
+                        {
+                            Dictionary<string, InlineKeyboardMarkup> keys;
+                            using (StreamReader reader = new StreamReader(inlineFileName))
+                            {
+                                string buffer = reader.ReadToEnd();
+                                reader.Close();
+                                keys = JsonConvert.DeserializeObject<Dictionary<string, InlineKeyboardMarkup>>(buffer);
+                            }
+                            return keys;
+                        }
+                    default: return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public async Task<object> LoadKeyboardsAsync(KeyboardType keyboardType)
         {
             try
             {
@@ -108,7 +180,8 @@ namespace TelegramSimpleService
                 return null;
             }
         }
-        public Task<InlineKeyboardMarkup> GenerateInlineKeyboard(List<Tuple<string, string>> tupleTextData)
+
+        public InlineKeyboardMarkup GenerateInlineKeyboard(List<Tuple<string, string>> tupleTextData)
         {
             List<List<InlineKeyboardButton>> rows = new List<List<InlineKeyboardButton>>();
             foreach (Tuple<string, string> item in tupleTextData)
@@ -119,9 +192,9 @@ namespace TelegramSimpleService
                 };
                 rows.Add(buttons);
             }
-            return Task.FromResult(new InlineKeyboardMarkup(rows));
+            return new InlineKeyboardMarkup(rows);
         }
-        public Task<InlineKeyboardMarkup> GeneratePagedInlineKeyboard(List<Tuple<string, string>> tupleTextData, int pageNumber, int countInPage, Tuple<string, string> backButton, Tuple<string, string> forwardButton)
+        public InlineKeyboardMarkup GeneratePagedInlineKeyboard(List<Tuple<string, string>> tupleTextData, int pageNumber, int countInPage, Tuple<string, string> backButton, Tuple<string, string> forwardButton)
         {
             List<List<InlineKeyboardButton>> rows = new List<List<InlineKeyboardButton>>();
 
@@ -186,7 +259,7 @@ namespace TelegramSimpleService
                 }
             }
 
-            return Task.FromResult(new InlineKeyboardMarkup(rows));
+            return new InlineKeyboardMarkup(rows);
         }
     }
     public enum KeyboardType { Reply, Inline }
