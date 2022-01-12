@@ -10,17 +10,18 @@
     <PackageProjectUrl>https://github.com/asceso/TelegramSimpleService</PackageProjectUrl>
     <PackageIcon>package.png</PackageIcon>
     <PackageIconUrl />
-    <FileVersion>1.0.0.1</FileVersion>
-    <Version>1.0.1</Version>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Version>1.0.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Telegram.Bot" Version="17.0.0" />
     <PackageReference Include="Telegram.Bot.Extensions.Polling" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="package.png">
+    <None Update="Assets\package.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
