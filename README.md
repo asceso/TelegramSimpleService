@@ -9,6 +9,7 @@
    2.2. Инициализация телеграм клиентов</br>
    2.3. Отправка логов</br>
    2.4. Реализованные типы</br>
+   2.5. Клавиатуры</br>
 
 ---
 
@@ -60,7 +61,7 @@ if (!isCorrect)
 debugger = await telegramService.CreateDebugBot("YOUR_TOKEN");
 ```
 
-Для того чтобы прослушивать сообщения ботом необходимо создать класс имлементирующий интерфейс IUpdateHandler
+Для того чтобы прослушивать сообщения ботом необходимо создать класс имплементирующий интерфейс IUpdateHandler
 и вызвать метод StartMainBotReceiving - для прослушивания с основного бота
 или метод StartBotReceiving - для прослушивания с другого объекта TelegramBotClient
 
@@ -141,4 +142,61 @@ SendMessageWithKeyboard - метод отправляет сообщение с 
 Метод перегружен и принимает ReplyKeyboardMarkup или InlineKeyboardMarkup
 ```C#
 await telegramService.SendMessageWithKeyboard(target_id, "text", markup)
+```
+
+[Клавиатуры]:ru_keyboards
+## 2.5 Клавиатуры
+Для иницилизации сервиса клавиатур используйте интерфейс IKeyboardService
+
+```C#
+namespace YourBot
+{
+    private IKeyboardService keyboardService;
+  
+    class Program
+    {
+      keyboardService = new KeyboardService();
+    }
+}
+```
+
+По умолчанию метод задает имена файлов для хранимых клавиатур r_keys.json и i_keys.json</br>
+Изменить имена можно с помощью метода SetStoreFileName(string, string) в параметрах указываются новые имена для файлов</br>
+Метод возвращает true при успешном выполнении
+
+```C#
+await keyboardService.SetStoreFileName("new_reply_keyboards_name.json", "new_inline_keyboards_name.json")
+```
+
+Для сохранения клавиатур используется метод SaveKeyboards(keyboards) возвращает true в случае успеха
+
+```C#
+await keyboardService.SaveKeyboards(keyboards);
+```
+
+Для загрузки сохраненных клавиатур используется метод LoadKeyboards(KeyboardType) и выбирается какую клавиатуру необходимо загрузить</br>
+Метод возвращает object который нужно привести к типу нужной клавиатуры
+
+```C#
+Dictionary<string, ReplyKeyboardMarkup> loaded_r_keys = (Dictionary<string, ReplyKeyboardMarkup>)await keyboardService.LoadKeyboards(KeyboardType.Reply);
+Dictionary<string, InlineKeyboardMarkup> loaded_i_keys = (Dictionary<string, InlineKeyboardMarkup>)await keyboardService.LoadKeyboards(KeyboardType.Inline);
+```
+
+Для генерации inline клавиатуры используйте метод GenerateInlineKeyboard(List<Tuple<string, string>>) </br>
+Для каждого элемента списка используется тип Tuple где 1 элемент текст кнопки 2 элемент CallbackData
+
+```C#
+InlineKeyboardMarkup keyboard = await keyboardService.GenerateInlineKeyboard(myCollection);
+```
+
+Для генерации так же доступен расширенный метод GeneratePagedInlineKeyboard, работает по принципу GenerateInlineKeyboard с разницей в параметрах</br>
+В параметрах указывается номер текущей страницы, максимальное кол-во элементов на странице, данные для кнопок назад и вперед</br>
+При указании страницы вне допустимого значения выбирается первая или последняя страница, к примеру страниц 5 при вводе страницы 7 будет загрузка страницы 5
+
+```C#
+//Загрузка страницы 1, кол-во элементов на странице 5
+InlineKeyboardMarkup keyboard = await keyboardService.GeneratePagedInlineKeyboard(myCollection, 1, 5, new Tuple<string, string>("Btn1", "Back"), new Tuple<string, string>("Btn2", "Forward"));
+
+//Загрузка страницы 3, кол-во элементов на странице 5
+InlineKeyboardMarkup keyboard = await keyboardService.GeneratePagedInlineKeyboard(myCollection, 3, 5, new Tuple<string, string>("Btn1", "Back"), new Tuple<string, string>("Btn2", "Forward"));
 ```

@@ -157,30 +157,33 @@ namespace TelegramSimpleService
                 }
             }
 
-            if (pageNumber != 1 && pageNumber < pageMax)
+            if (pageMax != 1)
             {
-                List<InlineKeyboardButton> buttons = new List<InlineKeyboardButton>
+                if (pageNumber < pageMax)
+                {
+                    List<InlineKeyboardButton> buttons = new List<InlineKeyboardButton>
                 {
                     new InlineKeyboardButton(backButton.Item1) { CallbackData = $"{backButton.Item2}" },
                     new InlineKeyboardButton(forwardButton.Item1) { CallbackData = $"{forwardButton.Item2}" }
                 };
-                rows.Add(buttons);
-            }
-            else if (pageNumber == 1)
-            {
-                List<InlineKeyboardButton> buttons = new List<InlineKeyboardButton>
+                    rows.Add(buttons);
+                }
+                else if (pageNumber == 1)
+                {
+                    List<InlineKeyboardButton> buttons = new List<InlineKeyboardButton>
                 {
                     new InlineKeyboardButton(forwardButton.Item1) { CallbackData = $"{forwardButton.Item2}" }
                 };
-                rows.Add(buttons);
-            }
-            else if (pageNumber == pageMax)
-            {
-                List<InlineKeyboardButton> buttons = new List<InlineKeyboardButton>
+                    rows.Add(buttons);
+                }
+                else if (pageNumber == pageMax)
+                {
+                    List<InlineKeyboardButton> buttons = new List<InlineKeyboardButton>
                 {
                     new InlineKeyboardButton(backButton.Item1) { CallbackData = $"{backButton.Item2}" },
                 };
-                rows.Add(buttons);
+                    rows.Add(buttons);
+                }
             }
 
             return Task.FromResult(new InlineKeyboardMarkup(rows));
