@@ -46,8 +46,25 @@ namespace TelegramSimpleService
         {
             try
             {
+                Dictionary<string, List<string>> savePairs = new Dictionary<string, List<string>>();
+                foreach (var pair in keyboards)
+                {
+                    int rowNum = 1;
+                    List<string> saveValues = new List<string>();
+                    foreach (var keyboard in pair.Value.Keyboard)
+                    {
+                        int colNum = 1;
+                        foreach (var value in keyboard.Select(k => k.Text))
+                        {
+                            saveValues.Add($"{rowNum}.{colNum++}:{value}");
+                        }
+                        rowNum++;
+                    }
+                    savePairs.Add(pair.Key, saveValues);
+                }
+
                 using StreamWriter writer = new StreamWriter(replyFileName);
-                writer.Write(JsonConvert.SerializeObject(keyboards, Formatting.Indented));
+                writer.Write(JsonConvert.SerializeObject(savePairs, Formatting.Indented));
                 writer.Close();
                 return true;
             }
@@ -60,8 +77,25 @@ namespace TelegramSimpleService
         {
             try
             {
+                Dictionary<string, List<string>> savePairs = new Dictionary<string, List<string>>();
+                foreach (var pair in keyboards)
+                {
+                    int rowNum = 1;
+                    List<string> saveValues = new List<string>();
+                    foreach (var keyboard in pair.Value.Keyboard)
+                    {
+                        int colNum = 1;
+                        foreach (var value in keyboard.Select(k => k.Text))
+                        {
+                            saveValues.Add($"{rowNum}.{colNum++}:{value}");
+                        }
+                        rowNum++;
+                    }
+                    savePairs.Add(pair.Key, saveValues);
+                }
+
                 using StreamWriter writer = new StreamWriter(replyFileName);
-                await writer.WriteAsync(JsonConvert.SerializeObject(keyboards, Formatting.Indented));
+                await writer.WriteAsync(JsonConvert.SerializeObject(savePairs, Formatting.Indented));
                 writer.Close();
                 return true;
             }
@@ -75,8 +109,25 @@ namespace TelegramSimpleService
         {
             try
             {
+                Dictionary<string, List<string>> savePairs = new Dictionary<string, List<string>>();
+                foreach (var pair in keyboards)
+                {
+                    int rowNum = 1;
+                    List<string> saveValues = new List<string>();
+                    foreach (var keyboard in pair.Value.InlineKeyboard)
+                    {
+                        int colNum = 1;
+                        foreach (var value in keyboard.ToList())
+                        {
+                            saveValues.Add($"{rowNum}.{colNum++}:{value.Text}:{value.CallbackData}");
+                        }
+                        rowNum++;
+                    }
+                    savePairs.Add(pair.Key, saveValues);
+                }
+
                 using StreamWriter writer = new StreamWriter(inlineFileName);
-                writer.WriteAsync(JsonConvert.SerializeObject(keyboards, Formatting.Indented));
+                writer.WriteAsync(JsonConvert.SerializeObject(savePairs, Formatting.Indented));
                 writer.Close();
                 return true;
             }
@@ -89,8 +140,25 @@ namespace TelegramSimpleService
         {
             try
             {
+                Dictionary<string, List<string>> savePairs = new Dictionary<string, List<string>>();
+                foreach (var pair in keyboards)
+                {
+                    int rowNum = 1;
+                    List<string> saveValues = new List<string>();
+                    foreach (var keyboard in pair.Value.InlineKeyboard)
+                    {
+                        int colNum = 1;
+                        foreach (var value in keyboard.ToList())
+                        {
+                            saveValues.Add($"{rowNum}.{colNum++}:{value.Text}:{value.CallbackData}");
+                        }
+                        rowNum++;
+                    }
+                    savePairs.Add(pair.Key, saveValues);
+                }
+
                 using StreamWriter writer = new StreamWriter(inlineFileName);
-                await writer.WriteAsync(JsonConvert.SerializeObject(keyboards, Formatting.Indented));
+                await writer.WriteAsync(JsonConvert.SerializeObject(savePairs, Formatting.Indented));
                 writer.Close();
                 return true;
             }
@@ -108,13 +176,45 @@ namespace TelegramSimpleService
                 {
                     case KeyboardType.Reply:
                         {
-                            Dictionary<string, ReplyKeyboardMarkup> keys;
-                            using (StreamReader reader = new StreamReader(replyFileName))
+                            Dictionary<string, List<string>> savedPairs = new Dictionary<string, List<string>>();
+                            using StreamReader reader = new StreamReader(replyFileName);
+                            savedPairs = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(reader.ReadToEnd());
+                            reader.Close();
+                            Dictionary<string, ReplyKeyboardMarkup> keys = new Dictionary<string, ReplyKeyboardMarkup>();
+
+                            foreach (KeyValuePair<string, List<string>> pair in savedPairs)
                             {
-                                string buffer = reader.ReadToEnd();
-                                reader.Close();
-                                keys = JsonConvert.DeserializeObject<Dictionary<string, ReplyKeyboardMarkup>>(buffer);
+                                int currentRow = 1;
+                                int currentCol = 1;
+
+                                List<List<KeyboardButton>> rows = new List<List<KeyboardButton>>();
+                                List<KeyboardButton> collumns = new List<KeyboardButton>();
+
+                                foreach (string item in pair.Value)
+                                {
+                                    string[] parts = item.Split(':');
+                                    int[] position = parts[0].Split('.').Select(p => int.Parse(p)).ToArray();
+
+                                    if (position[0] != currentRow)
+                                    {
+                                        currentRow++;
+                                        currentCol = 1;
+
+                                        rows.Add(collumns.ToList());
+                                        collumns.Clear();
+                                    }
+
+                                    collumns.Add(new KeyboardButton(parts[1]));
+                                    currentCol++;
+                                }
+
+                                rows.Add(collumns.ToList());
+                                collumns.Clear();
+
+                                keys.Add(pair.Key, new ReplyKeyboardMarkup(rows.ToList()));
+                                rows.Clear();
                             }
+
                             foreach (var key in keys.Values)
                             {
                                 key.ResizeKeyboard = true;
@@ -123,12 +223,43 @@ namespace TelegramSimpleService
                         }
                     case KeyboardType.Inline:
                         {
-                            Dictionary<string, InlineKeyboardMarkup> keys;
-                            using (StreamReader reader = new StreamReader(inlineFileName))
+                            Dictionary<string, List<string>> savedPairs = new Dictionary<string, List<string>>();
+                            using StreamReader reader = new StreamReader(inlineFileName);
+                            savedPairs = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(reader.ReadToEnd());
+                            reader.Close();
+                            Dictionary<string, InlineKeyboardMarkup> keys = new Dictionary<string, InlineKeyboardMarkup>();
+
+                            foreach (KeyValuePair<string, List<string>> pair in savedPairs)
                             {
-                                string buffer = reader.ReadToEnd();
-                                reader.Close();
-                                keys = JsonConvert.DeserializeObject<Dictionary<string, InlineKeyboardMarkup>>(buffer);
+                                int currentRow = 1;
+                                int currentCol = 1;
+
+                                List<List<InlineKeyboardButton>> rows = new List<List<InlineKeyboardButton>>();
+                                List<InlineKeyboardButton> collumns = new List<InlineKeyboardButton>();
+
+                                foreach (string item in pair.Value)
+                                {
+                                    string[] parts = item.Split(':');
+                                    int[] position = parts[0].Split('.').Select(p => int.Parse(p)).ToArray();
+
+                                    if (position[0] != currentRow)
+                                    {
+                                        currentRow++;
+                                        currentCol = 1;
+
+                                        rows.Add(collumns.ToList());
+                                        collumns.Clear();
+                                    }
+
+                                    collumns.Add(new InlineKeyboardButton(parts[1]) { CallbackData = parts[2] });
+                                    currentCol++;
+                                }
+
+                                rows.Add(collumns.ToList());
+                                collumns.Clear();
+
+                                keys.Add(pair.Key, new InlineKeyboardMarkup(rows.ToList()));
+                                rows.Clear();
                             }
                             return keys;
                         }
@@ -148,13 +279,45 @@ namespace TelegramSimpleService
                 {
                     case KeyboardType.Reply:
                         {
-                            Dictionary<string, ReplyKeyboardMarkup> keys;
-                            using (StreamReader reader = new StreamReader(replyFileName))
+                            Dictionary<string, List<string>> savedPairs = new Dictionary<string, List<string>>();
+                            using StreamReader reader = new StreamReader(replyFileName);
+                            savedPairs = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(await reader.ReadToEndAsync());
+                            reader.Close();
+                            Dictionary<string, ReplyKeyboardMarkup> keys = new Dictionary<string, ReplyKeyboardMarkup>();
+
+                            foreach (KeyValuePair<string, List<string>> pair in savedPairs)
                             {
-                                string buffer = await reader.ReadToEndAsync();
-                                reader.Close();
-                                keys = JsonConvert.DeserializeObject<Dictionary<string, ReplyKeyboardMarkup>>(buffer);
+                                int currentRow = 1;
+                                int currentCol = 1;
+
+                                List<List<KeyboardButton>> rows = new List<List<KeyboardButton>>();
+                                List<KeyboardButton> collumns = new List<KeyboardButton>();
+
+                                foreach (string item in pair.Value)
+                                {
+                                    string[] parts = item.Split(':');
+                                    int[] position = parts[0].Split('.').Select(p => int.Parse(p)).ToArray();
+
+                                    if (position[0] != currentRow)
+                                    {
+                                        currentRow++;
+                                        currentCol = 1;
+
+                                        rows.Add(collumns.ToList());
+                                        collumns.Clear();
+                                    }
+
+                                    collumns.Add(new KeyboardButton(parts[1]));
+                                    currentCol++;
+                                }
+
+                                rows.Add(collumns.ToList());
+                                collumns.Clear();
+
+                                keys.Add(pair.Key, new ReplyKeyboardMarkup(rows.ToList()));
+                                rows.Clear();
                             }
+
                             foreach (var key in keys.Values)
                             {
                                 key.ResizeKeyboard = true;
@@ -163,12 +326,43 @@ namespace TelegramSimpleService
                         }
                     case KeyboardType.Inline:
                         {
-                            Dictionary<string, InlineKeyboardMarkup> keys;
-                            using (StreamReader reader = new StreamReader(inlineFileName))
+                            Dictionary<string, List<string>> savedPairs = new Dictionary<string, List<string>>();
+                            using StreamReader reader = new StreamReader(inlineFileName);
+                            savedPairs = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(await reader.ReadToEndAsync());
+                            reader.Close();
+                            Dictionary<string, InlineKeyboardMarkup> keys = new Dictionary<string, InlineKeyboardMarkup>();
+
+                            foreach (KeyValuePair<string, List<string>> pair in savedPairs)
                             {
-                                string buffer = await reader.ReadToEndAsync();
-                                reader.Close();
-                                keys = JsonConvert.DeserializeObject<Dictionary<string, InlineKeyboardMarkup>>(buffer);
+                                int currentRow = 1;
+                                int currentCol = 1;
+
+                                List<List<InlineKeyboardButton>> rows = new List<List<InlineKeyboardButton>>();
+                                List<InlineKeyboardButton> collumns = new List<InlineKeyboardButton>();
+
+                                foreach (string item in pair.Value)
+                                {
+                                    string[] parts = item.Split(':');
+                                    int[] position = parts[0].Split('.').Select(p => int.Parse(p)).ToArray();
+
+                                    if (position[0] != currentRow)
+                                    {
+                                        currentRow++;
+                                        currentCol = 1;
+
+                                        rows.Add(collumns.ToList());
+                                        collumns.Clear();
+                                    }
+
+                                    collumns.Add(new InlineKeyboardButton(parts[1]) { CallbackData = parts[2] });
+                                    currentCol++;
+                                }
+
+                                rows.Add(collumns.ToList());
+                                collumns.Clear();
+
+                                keys.Add(pair.Key, new InlineKeyboardMarkup(rows.ToList()));
+                                rows.Clear();
                             }
                             return keys;
                         }
