@@ -75,6 +75,10 @@ namespace TelegramSimpleService
         /// <param name="backButton">back button text and callback data</param>
         /// <param name="forwardButton">forward button text and callback data</param>
         /// <returns>inline keyboard button with pages</returns>
-        InlineKeyboardMarkup GeneratePagedInlineKeyboard(List<Tuple<string, string>> tupleTextData, int pageNumber, int countInPage, Tuple<string, string> backButton, Tuple<string, string> forwardButton);
+        InlineKeyboardMarkup GeneratePagedInlineKeyboard(List<Tuple<string, string>> tupleTextData,
+                                                         int pageNumber,
+                                                         int countInPage,
+                                                         Tuple<string, string> backButton,
+                                                         Tuple<string, string> forwardButton);
     }
 }

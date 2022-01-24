@@ -80,17 +80,39 @@ namespace TelegramSimpleService
         /// </summary>
         /// <param name="uid">uid user</param>
         /// <param name="message">message</param>
+        /// <param name="parse">parse mode, default is HTML</param>
         /// <param name="client">client may be null</param>
         /// <returns></returns>
-        Task SendRemoveMessageAsync(long uid, string message, TelegramBotClient client = null);
+        Task SendRemoveMessageAsync(long uid, string message, ParseMode parse = ParseMode.Html, TelegramBotClient client = null);
         /// <summary>
         /// Send simple text message
         /// </summary>
         /// <param name="uid">uid user</param>
         /// <param name="message">message</param>
+        /// <param name="parse">parse mode, default is HTML</param>
         /// <param name="client">client may be null</param>
         /// <returns></returns>
-        Task SendMessageAsync(long uid, string message, TelegramBotClient client = null);
+        Task SendMessageAsync(long uid, string message, ParseMode parse = ParseMode.Html, TelegramBotClient client = null);
+        /// <summary>
+        /// Send message with keyboard reply
+        /// </summary>
+        /// <param name="uid">uid user</param>
+        /// <param name="message">message</param>
+        /// <param name="markup">ReplyKeyboardMarkup</param>
+        /// <param name="parse">parse mode, default is HTML</param>
+        /// <param name="client">client may be null</param>
+        /// <returns></returns>
+        Task SendMessageWithKeyboardAsync(long uid, string message, ReplyKeyboardMarkup markup, ParseMode parse = ParseMode.Html, TelegramBotClient client = null);
+        /// <summary>
+        /// Send message with inline buttons
+        /// </summary>
+        /// <param name="uid">uid user</param>
+        /// <param name="message">message</param>
+        /// <param name="markup">InlineKeyboardMarkup</param>
+        /// <param name="parse">parse mode, default is HTML</param>
+        /// <param name="client">client may be null</param>
+        /// <returns></returns>
+        Task SendMessageWithKeyboardAsync(long uid, string message, InlineKeyboardMarkup markup, ParseMode parse = ParseMode.Html, TelegramBotClient client = null);
         /// <summary>
         /// Send message with file
         /// </summary>
@@ -99,26 +121,15 @@ namespace TelegramSimpleService
         /// <param name="fs">file stream of file FileMode.Open</param>
         /// <param name="fileName">filename in telegram</param>
         /// <param name="deleteFileWhenComplete">delete file when send complete</param>
+        /// <param name="parse">parse mode, default is HTML</param>
         /// <param name="client">client may be null</param>
         /// <returns></returns>
-        Task SendMessageWithFileAsync(long uid, string message, FileStream fs, string fileName, bool deleteFileWhenComplete = true, TelegramBotClient client = null);
-        /// <summary>
-        /// Send message with keyboard reply
-        /// </summary>
-        /// <param name="uid">uid user</param>
-        /// <param name="message">message</param>
-        /// <param name="markup">ReplyKeyboardMarkup</param>
-        /// <param name="client">client may be null</param>
-        /// <returns></returns>
-        Task SendMessageWithKeyboardAsync(long uid, string message, ReplyKeyboardMarkup markup, TelegramBotClient client = null);
-        /// <summary>
-        /// Send message with inline buttons
-        /// </summary>
-        /// <param name="uid">uid user</param>
-        /// <param name="message">message</param>
-        /// <param name="markup">InlineKeyboardMarkup</param>
-        /// <param name="client">client may be null</param>
-        /// <returns></returns>
-        Task SendMessageWithKeyboardAsync(long uid, string message, InlineKeyboardMarkup markup, TelegramBotClient client = null);
+        Task SendMessageWithFileAsync(long uid,
+                                      string message,
+                                      FileStream fs,
+                                      string fileName,
+                                      bool deleteFileWhenComplete = true,
+                                      ParseMode parse = ParseMode.Html,
+                                      TelegramBotClient client = null);
     }
 }

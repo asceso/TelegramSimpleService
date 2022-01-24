@@ -388,7 +388,11 @@ namespace TelegramSimpleService
             }
             return new InlineKeyboardMarkup(rows);
         }
-        public InlineKeyboardMarkup GeneratePagedInlineKeyboard(List<Tuple<string, string>> tupleTextData, int pageNumber, int countInPage, Tuple<string, string> backButton, Tuple<string, string> forwardButton)
+        public InlineKeyboardMarkup GeneratePagedInlineKeyboard(List<Tuple<string, string>> tupleTextData,
+                                                                int pageNumber,
+                                                                int countInPage,
+                                                                Tuple<string, string> backButton,
+                                                                Tuple<string, string> forwardButton)
         {
             List<List<InlineKeyboardButton>> rows = new List<List<InlineKeyboardButton>>();
 
@@ -455,6 +459,7 @@ namespace TelegramSimpleService
 
             return new InlineKeyboardMarkup(rows);
         }
+
     }
     public enum KeyboardType { Reply, Inline }
 }

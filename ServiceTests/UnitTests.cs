@@ -24,8 +24,11 @@ namespace ServiceTests
         [Test]
         public async Task InitAsync()
         {
-            bool isCorrect = await telegramService.CheckBotTokenAsync(botToken);
-            Assert.IsTrue(isCorrect);
+            if (botToken != "YOUR_TOKEN")
+            {
+                bool isCorrect = await telegramService.CheckBotTokenAsync(botToken);
+                Assert.IsTrue(isCorrect);
+            }
         }
         [Test]
         public async Task TestKeyboard()
