@@ -5,7 +5,12 @@ VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramSimpleService", "TelegramSimpleService\TelegramSimpleService.csproj", "{8534938F-BFFD-4930-8D86-69DEF8D6D027}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceTests", "ServiceTests\ServiceTests.csproj", "{5A6B3471-5C5F-4F05-96DC-994FAC4016D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceTests", "ServiceTests\ServiceTests.csproj", "{5A6B3471-5C5F-4F05-96DC-994FAC4016D1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{09062A49-B526-41B4-B4A8-EDF5C3E9CE8D}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
