@@ -136,11 +136,11 @@ namespace TelegramSimpleService
         {
             if (client != null)
             {
-                await client.SendTextMessageAsync(uid, message, ParseMode.Html);
+                await client.SendTextMessageAsync(uid, message, parse);
             }
             else if (Client != null)
             {
-                await Client.SendTextMessageAsync(uid, message, ParseMode.Html);
+                await Client.SendTextMessageAsync(uid, message, parse);
             }
         }
         public async Task SendMessageWithKeyboardAsync(long uid, string message, ReplyKeyboardMarkup markup, ParseMode parse = ParseMode.Html, TelegramBotClient client = null)
