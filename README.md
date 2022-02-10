@@ -143,7 +143,7 @@ await telegramService.SendMessageWithFileAsync(target_id, "text", new FileStream
 ```
 
 SendMessageWithKeyboard - метод отправляет сообщение с клавиатурой
-Метод перегружен и принимает ReplyKeyboardMarkup или InlineKeyboardMarkup
+Метод перегружен и принимает ReplyKeyboardMarkup или InlineKeyboardMarkup или ReplyKeyboardRemove
 ```C#
 await telegramService.SendMessageWithKeyboardAsync(target_id, "text", markup)
 ```
