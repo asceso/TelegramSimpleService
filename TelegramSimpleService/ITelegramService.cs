@@ -138,6 +138,17 @@ namespace TelegramSimpleService
         Task SendMessageWithKeyboardAsync(long uid, string message, ReplyKeyboardRemove markup, ParseMode parse = ParseMode.Html, TelegramBotClient client = null);
 
         /// <summary>
+        /// Send message with keyboard, method accept null markup
+        /// </summary>
+        /// <param name="uid">uid user</param>
+        /// <param name="message">message</param>
+        /// <param name="markup">remove markup</param>
+        /// <param name="parse">parse mode, default is HTML</param>
+        /// <param name="client">client may be null</param>
+        /// <returns></returns>
+        Task SendMessageWithKeyboardAsync(long uid, string message, object markup, ParseMode parse = ParseMode.Html, TelegramBotClient client = null);
+
+        /// <summary>
         /// Send message with file
         /// </summary>
         /// <param name="uid">uid user</param>

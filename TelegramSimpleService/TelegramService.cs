@@ -190,6 +190,26 @@ namespace TelegramSimpleService
             }
         }
 
+        public async Task SendMessageWithKeyboardAsync(long uid, string message, object markup, ParseMode parse = ParseMode.Html, TelegramBotClient client = null)
+        {
+            if (markup is ReplyKeyboardMarkup replyKeyboardMarkup)
+            {
+                await SendMessageWithKeyboardAsync(uid, message, replyKeyboardMarkup, parse, client);
+            }
+            else if (markup is InlineKeyboardMarkup inlineKeyboardMarkup)
+            {
+                await SendMessageWithKeyboardAsync(uid, message, inlineKeyboardMarkup, parse, client);
+            }
+            else if (markup == null)
+            {
+                await SendMessageWithKeyboardAsync(uid, message, new ReplyKeyboardRemove(), parse, client);
+            }
+            else
+            {
+                throw new ArgumentException("Another types not support by this method");
+            }
+        }
+
         public async Task SendMessageWithFileAsync(long uid,
                                                    string message,
                                                    FileStream fs,
