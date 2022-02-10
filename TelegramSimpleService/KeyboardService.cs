@@ -28,6 +28,7 @@ namespace TelegramSimpleService
                 _ => string.Empty,
             };
         }
+
         public bool SetStoreFileName(string replyKeyboards, string inlineKeyboards)
         {
             try
@@ -73,6 +74,7 @@ namespace TelegramSimpleService
                 return false;
             }
         }
+
         public async Task<bool> SaveKeyboardsAsync(Dictionary<string, ReplyKeyboardMarkup> keyboards)
         {
             try
@@ -136,6 +138,7 @@ namespace TelegramSimpleService
                 return false;
             }
         }
+
         public async Task<bool> SaveKeyboardsAsync(Dictionary<string, InlineKeyboardMarkup> keyboards)
         {
             try
@@ -271,6 +274,7 @@ namespace TelegramSimpleService
                 return null;
             }
         }
+
         public async Task<object> LoadKeyboardsAsync(KeyboardType keyboardType)
         {
             try
@@ -388,6 +392,7 @@ namespace TelegramSimpleService
             }
             return new InlineKeyboardMarkup(rows);
         }
+
         public InlineKeyboardMarkup GeneratePagedInlineKeyboard(List<Tuple<string, string>> tupleTextData,
                                                                 int pageNumber,
                                                                 int countInPage,
@@ -459,7 +464,8 @@ namespace TelegramSimpleService
 
             return new InlineKeyboardMarkup(rows);
         }
-
     }
-    public enum KeyboardType { Reply, Inline }
+
+    public enum KeyboardType
+    { Reply, Inline }
 }

@@ -13,6 +13,7 @@ namespace TelegramSimpleService
         /// <param name="keyboardType">keyboard type from enum</param>
         /// <returns></returns>
         string GetFileName(KeyboardType keyboardType);
+
         /// <summary>
         /// Set name for keyboards data, as default when dont use this method names is<br></br>r_keys.json for reply keyboards<br></br>i_keys.json for inline keyboards
         /// </summary>
@@ -27,6 +28,7 @@ namespace TelegramSimpleService
         /// <param name="keyboards">dictionary with keyboards, key is name for keyboard</param>
         /// <returns>true when complete</returns>
         bool SaveKeyboards(Dictionary<string, ReplyKeyboardMarkup> keyboards);
+
         /// <summary>
         /// Method save reply keyboards to json file
         /// </summary>
@@ -40,19 +42,21 @@ namespace TelegramSimpleService
         /// <param name="keyboards">dictionary with keyboards, key is name for keyboard</param>
         /// <returns>true when complete</returns>
         bool SaveKeyboards(Dictionary<string, InlineKeyboardMarkup> keyboards);
+
         /// <summary>
         /// Method save inline keyboards to json file
         /// </summary>
         /// <param name="keyboards">dictionary with keyboards, key is name for keyboard</param>
         /// <returns>true when complete</returns>
         Task<bool> SaveKeyboardsAsync(Dictionary<string, InlineKeyboardMarkup> keyboards);
-        
+
         /// <summary>
         /// Method load keyboards from file
         /// </summary>
         /// <param name="keyboardType">keyboard type</param>
         /// <returns>Dictionary<string, ReplyKeyboardMarkup> or Dictionary<string, InlineKeyboardMarkup></returns>
         object LoadKeyboards(KeyboardType keyboardType);
+
         /// <summary>
         /// Method load keyboards from file
         /// </summary>
@@ -66,6 +70,7 @@ namespace TelegramSimpleService
         /// <param name="tupleTextData">tuple element item1 is text for button item2 is callback data</param>
         /// <returns>Inline keyboard markup</returns>
         InlineKeyboardMarkup GenerateInlineKeyboard(List<Tuple<string, string>> tupleTextData);
+
         /// <summary>
         /// Generate paged list for big list collection
         /// </summary>
