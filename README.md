@@ -137,9 +137,10 @@ await telegramService.SendMessageAsync(target_id, "text")
 ```
 
 SendMessageWithFile - метод отправляет сообщение с вложением, если указать параметр deleteFileWhenComplete = false файл остается на компьютере,
-по умолчанию = true, файл удаляется после отправки
+по умолчанию = true, файл удаляется после отправки,
+при необходимости можно добавить клавиатуру используя ReplyKeyboardMarkup в качестве параметра
 ```C#
-await telegramService.SendMessageWithFileAsync(target_id, "text", new FileStream("example.txt", FileMode.Open))
+await telegramService.SendMessageWithFileAsync(target_id, "text", new FileStream("example.txt", FileMode.Open), "example.txt")
 ```
 
 SendMessageWithKeyboard - метод отправляет сообщение с клавиатурой

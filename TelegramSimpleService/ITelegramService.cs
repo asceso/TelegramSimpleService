@@ -155,6 +155,7 @@ namespace TelegramSimpleService
         /// <param name="message">message (caption)</param>
         /// <param name="fs">file stream of file FileMode.Open</param>
         /// <param name="fileName">filename in telegram</param>
+        /// <param name="markup">markup for message</param>
         /// <param name="deleteFileWhenComplete">delete file when send complete</param>
         /// <param name="parse">parse mode, default is HTML</param>
         /// <param name="client">client may be null</param>
@@ -163,6 +164,7 @@ namespace TelegramSimpleService
                                       string message,
                                       FileStream fs,
                                       string fileName,
+                                      ReplyKeyboardMarkup markup = null,
                                       bool deleteFileWhenComplete = true,
                                       ParseMode parse = ParseMode.Html,
                                       TelegramBotClient client = null);

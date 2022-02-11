@@ -214,13 +214,21 @@ namespace TelegramSimpleService
                                                    string message,
                                                    FileStream fs,
                                                    string fileName,
+                                                   ReplyKeyboardMarkup markup = null,
                                                    bool deleteFileWhenComplete = true,
                                                    ParseMode parse = ParseMode.Html,
                                                    TelegramBotClient client = null)
         {
             if (client != null)
             {
-                await client.SendDocumentAsync(uid, new Telegram.Bot.Types.InputFiles.InputOnlineFile(fs, fileName), caption: message, parseMode: parse);
+                if (markup == null)
+                {
+                    await client.SendDocumentAsync(uid, new Telegram.Bot.Types.InputFiles.InputOnlineFile(fs, fileName), caption: message, parseMode: parse);
+                }
+                else
+                {
+                    await client.SendDocumentAsync(uid, new Telegram.Bot.Types.InputFiles.InputOnlineFile(fs, fileName), caption: message, parseMode: parse, replyMarkup: markup);
+                }
                 fs.Close();
                 if (deleteFileWhenComplete)
                 {
@@ -229,7 +237,14 @@ namespace TelegramSimpleService
             }
             else if (Client != null)
             {
-                await Client.SendDocumentAsync(uid, new Telegram.Bot.Types.InputFiles.InputOnlineFile(fs, fileName), caption: message, parseMode: parse);
+                if (markup == null)
+                {
+                    await Client.SendDocumentAsync(uid, new Telegram.Bot.Types.InputFiles.InputOnlineFile(fs, fileName), caption: message, parseMode: parse);
+                }
+                else
+                {
+                    await Client.SendDocumentAsync(uid, new Telegram.Bot.Types.InputFiles.InputOnlineFile(fs, fileName), caption: message, parseMode: parse, replyMarkup: markup);
+                }
                 fs.Close();
                 if (deleteFileWhenComplete)
                 {
