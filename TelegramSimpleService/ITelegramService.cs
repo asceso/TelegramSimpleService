@@ -18,6 +18,39 @@ namespace TelegramSimpleService
         TelegramBotClient CreateMainBot(string token);
 
         /// <summary>
+        /// Create main bot with http proxy
+        /// </summary>
+        /// <param name="token">token</param>
+        /// <param name="host">hostname or ip</param>
+        /// <param name="port">port</param>
+        /// <param name="login">login</param>
+        /// <param name="password">password</param>
+        /// <returns></returns>
+        TelegramBotClient CreateMainBotWithHttpProxy(string token, string host, int port, string login, string password);
+
+        /// <summary>
+        /// Create main bot with sock5 proxy
+        /// </summary>
+        /// <param name="token">token</param>
+        /// <param name="host">address</param>
+        /// <param name="port">port</param>
+        /// <param name="resolveHostnames">resolve hostnames localy</param>
+        /// <returns></returns>
+        TelegramBotClient CreateMainBotWithSock5Proxy(string token, string host, int port, bool resolveHostnames);
+
+        /// <summary>
+        /// Create main bot with sock5 proxy
+        /// </summary>
+        /// <param name="token">token</param>
+        /// <param name="host">address</param>
+        /// <param name="port">port</param>
+        /// <param name="login">login</param>
+        /// <param name="password">password</param>
+        /// <param name="resolveHostnames">resolve hostnames localy</param>
+        /// <returns></returns>
+        TelegramBotClient CreateMainBotWithSock5Proxy(string token, string host, int port, string login, string password, bool resolveHostnames);
+
+        /// <summary>
         /// Create debugger bot
         /// </summary>
         /// <param name="token">token</param>

@@ -1,5 +1,8 @@
-﻿using System;
+﻿using MihaZupan;
+using System;
 using System.IO;
+using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -19,6 +22,55 @@ namespace TelegramSimpleService
             try
             {
                 Client = new TelegramBotClient(token);
+                Telegram.Bot.Types.User me = Client.GetMeAsync().Result;
+                return Client;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public TelegramBotClient CreateMainBotWithHttpProxy(string token, string host, int port, string login, string password)
+        {
+            try
+            {
+                WebProxy webProxy = new WebProxy(Host: host, Port: port) { Credentials = new NetworkCredential(login, password) };
+                HttpClient httpClient = new HttpClient(new HttpClientHandler { Proxy = webProxy, UseProxy = true });
+                Client = new TelegramBotClient(token, httpClient);
+                Telegram.Bot.Types.User me = Client.GetMeAsync().Result;
+                return Client;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public TelegramBotClient CreateMainBotWithSock5Proxy(string token, string host, int port, bool resolveHostnames)
+        {
+            try
+            {
+                HttpToSocks5Proxy proxy = new HttpToSocks5Proxy(host, port) { ResolveHostnamesLocally = resolveHostnames };
+                HttpClient httpClient = new HttpClient(new HttpClientHandler { Proxy = proxy, UseProxy = true });
+                Client = new TelegramBotClient(token, httpClient);
+                Telegram.Bot.Types.User me = Client.GetMeAsync().Result;
+                return Client;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public TelegramBotClient CreateMainBotWithSock5Proxy(string token, string host, int port, string login, string password, bool resolveHostnames)
+        {
+            try
+            {
+                HttpToSocks5Proxy proxy = new HttpToSocks5Proxy(host, port, login, password) { ResolveHostnamesLocally = resolveHostnames };
+                HttpClient httpClient = new HttpClient(new HttpClientHandler { Proxy = proxy, UseProxy = true });
+                Client = new TelegramBotClient(token, httpClient);
+                Telegram.Bot.Types.User me = Client.GetMeAsync().Result;
                 return Client;
             }
             catch (Exception)

@@ -10,12 +10,13 @@
     <PackageProjectUrl>https://github.com/asceso/TelegramSimpleService</PackageProjectUrl>
     <PackageIcon>package.png</PackageIcon>
     <PackageIconUrl />
-    <FileVersion>1.0.6.4</FileVersion>
-    <Version>1.0.6.4</Version>
-    <AssemblyVersion>1.0.6.4</AssemblyVersion>
+    <FileVersion>1.0.6.5</FileVersion>
+    <Version>1.0.6.5</Version>
+    <AssemblyVersion>1.0.6.5</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="HttpToSocks5Proxy" Version="1.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Telegram.Bot" Version="17.0.0" />
     <PackageReference Include="Telegram.Bot.Extensions.Polling" Version="1.0.2" />

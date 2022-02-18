@@ -37,7 +37,8 @@ namespace YourBot
 
 ## Инициализация телеграм клиентов
 Внутри сервиса лежит два статических объекта Client и Debugger с типом TelegramBotClient</br>
-Для их инициализации используйте соответствующие методы
+Для их инициализации используйте соответствующие методы</br>
+Методы перегружены и доступна инициализация с прокси
 
 ```C#
 TelegramBotClient client;
@@ -64,6 +65,17 @@ bool isCorrect = await telegramService.CheckBotToken("YOUR_TOKEN");
 if (!isCorrect)
   return;
 other = telegramService.CreateOtherBot("YOUR_TOKEN");
+```
+
+```C#
+//Proxy http
+client = telegramService.CreateMainBotWithHttpProxy("YOUR_TOKEN", "<ProxyIP>", 8080, "login", "password");
+
+//Proxy sock5
+client = telegramService.CreateMainBotWithSock5Proxy("YOUR_TOKEN", "<ProxyIP>", 8080, true);
+
+//Proxy sock5
+client = telegramService.CreateMainBotWithSock5Proxy("YOUR_TOKEN", "<ProxyIP>", 8080, "login", "password", true);
 ```
 
 Для того чтобы прослушивать сообщения ботом необходимо создать класс имплементирующий интерфейс IUpdateHandler
