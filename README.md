@@ -217,3 +217,19 @@ InlineKeyboardMarkup keyboard = keyboardService.GeneratePagedInlineKeyboard(myCo
 //Загрузка страницы 3, кол-во элементов на странице 5
 InlineKeyboardMarkup keyboard = keyboardService.GeneratePagedInlineKeyboard(myCollection, 3, 5, new Tuple<string, string>("Btn1", "Back"), new Tuple<string, string>("Btn2", "Forward"));
 ```
+
+С версии 1.0.7.0 доступны методы
+```C#
+SaveKeyboardsToOneRowType(Dictionary<string, ReplyKeyboardMarkup> keyboards);
+Dictionary<string, ReplyKeyboardMarkup> LoadOneRowKeyboards();
+```
+
+SaveKeyboardsToOneRowType сохраняет словарь с форматом одной строки, где в {} пишутся значения кнопок, а для разделения строк используется значение {END()}
+```JSON
+{
+   "Key1":"{Btn1.1}{Btn1.2}{END()}{Btn2.1}{End()}{Btn3.1}"
+   ...
+   "KeyN":"{}{}"
+}
+```
+LoadOneRowKeyboards() позволяет загрузить клавиатуры из формата одной строки
