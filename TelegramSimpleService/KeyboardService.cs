@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Telegram.Bot.Types.ReplyMarkups;
 
@@ -130,6 +132,35 @@ namespace TelegramSimpleService
 
                 using StreamWriter writer = new StreamWriter(inlineFileName);
                 writer.WriteAsync(JsonConvert.SerializeObject(savePairs, Formatting.Indented));
+                writer.Close();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool SaveKeyboardsToOneRowType(Dictionary<string, ReplyKeyboardMarkup> keyboards)
+        {
+            try
+            {
+                Dictionary<string, string> saveToFile = new Dictionary<string, string>();
+                foreach (var pair in keyboards)
+                {
+                    StringBuilder savedRow = new StringBuilder();
+                    foreach (var keyboard in pair.Value.Keyboard)
+                    {
+                        foreach (var value in keyboard.Select(k => k.Text))
+                        {
+                            savedRow.Append("{").Append(value).Append("}");
+                        }
+                        savedRow.Append("{END()}");
+                    }
+                    saveToFile.Add(pair.Key, savedRow.ToString());
+                }
+                using StreamWriter writer = new StreamWriter(replyFileName);
+                writer.Write(JsonConvert.SerializeObject(saveToFile, Formatting.Indented));
                 writer.Close();
                 return true;
             }
@@ -273,6 +304,48 @@ namespace TelegramSimpleService
             {
                 return null;
             }
+        }
+
+        public Dictionary<string, ReplyKeyboardMarkup> LoadOneRowKeyboards()
+        {
+            Dictionary<string, string> savedPairs = new Dictionary<string, string>();
+            using StreamReader reader = new StreamReader(replyFileName);
+            savedPairs = JsonConvert.DeserializeObject<Dictionary<string, string>>(reader.ReadToEnd());
+            reader.Close();
+            Dictionary<string, ReplyKeyboardMarkup> keys = new Dictionary<string, ReplyKeyboardMarkup>();
+
+            foreach (var pair in savedPairs)
+            {
+                List<List<KeyboardButton>> rows = new List<List<KeyboardButton>>();
+                List<KeyboardButton> collumns = new List<KeyboardButton>();
+
+                string[] rows_array = pair.Value.Split("{END()}").Where(r => !string.IsNullOrEmpty(r)).ToArray();
+                foreach (var row in rows_array)
+                {
+                    string[] collums_array = row.Split("{").Where(r => !string.IsNullOrEmpty(r)).ToArray();
+                    for (int i = 0; i < collums_array.Length; i++)
+                    {
+                        collums_array[i] = collums_array[i].Remove(collums_array[i].Length - 1);
+                    }
+
+                    foreach (var item in collums_array)
+                    {
+                        collumns.Add(new KeyboardButton(item));
+                    }
+
+                    rows.Add(collumns.ToList());
+                    collumns.Clear();
+                }
+
+                keys.Add(pair.Key, new ReplyKeyboardMarkup(rows.ToList()));
+                rows.Clear();
+            }
+
+            foreach (var key in keys.Values)
+            {
+                key.ResizeKeyboard = true;
+            }
+            return keys;
         }
 
         public async Task<object> LoadKeyboardsAsync(KeyboardType keyboardType)

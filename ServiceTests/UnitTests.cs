@@ -1,4 +1,4 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -116,6 +116,55 @@ namespace ServiceTests
             foreach (string key in loaded_i_keys.Keys)
             {
                 Assert.IsTrue(i_keys.Any(r => r.Key == key));
+            }
+        }
+
+        [Test]
+        public void TestOneRowLoad()
+        {
+            Dictionary<string, ReplyKeyboardMarkup> r_keys = new Dictionary<string, ReplyKeyboardMarkup>();
+            r_keys.Add("Test1", new ReplyKeyboardMarkup(new List<List<KeyboardButton>>()
+            {
+                new List<KeyboardButton>()
+                {
+                    new KeyboardButton("Test Row 1")
+                },
+                new List<KeyboardButton>()
+                {
+                    new KeyboardButton("Test Row 2")
+                },
+                new List<KeyboardButton>()
+                {
+                    new KeyboardButton("Test Row 3.1"),
+                    new KeyboardButton("Test Row 3.2"),
+                },
+                new List<KeyboardButton>()
+                {
+                    new KeyboardButton("Test Row 4"),
+                }
+            }));
+            r_keys.Add("Test2", new ReplyKeyboardMarkup(new List<List<KeyboardButton>>()
+            {
+                new List<KeyboardButton>()
+                {
+                    new KeyboardButton("Test Row 1")
+                },
+                new List<KeyboardButton>()
+                {
+                    new KeyboardButton("Cancel 🚫"),
+                    new KeyboardButton("Shop 🏪")
+                },
+                new List<KeyboardButton>()
+                {
+                    new KeyboardButton("Test Row 2")
+                }
+            }));
+            keyboardService.SaveKeyboardsToOneRowType(r_keys);
+
+            Dictionary<string, ReplyKeyboardMarkup> loaded_r_keys = keyboardService.LoadOneRowKeyboards();
+            foreach (string key in loaded_r_keys.Keys)
+            {
+                Assert.IsTrue(r_keys.Any(r => r.Key == key));
             }
         }
     }

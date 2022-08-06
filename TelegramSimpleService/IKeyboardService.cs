@@ -34,6 +34,13 @@ namespace TelegramSimpleService
         /// </summary>
         /// <param name="keyboards">dictionary with keyboards, key is name for keyboard</param>
         /// <returns>true when complete</returns>
+        bool SaveKeyboardsToOneRowType(Dictionary<string, ReplyKeyboardMarkup> keyboards);
+
+        /// <summary>
+        /// Method save reply keyboards to json file
+        /// </summary>
+        /// <param name="keyboards">dictionary with keyboards, key is name for keyboard</param>
+        /// <returns>true when complete</returns>
         Task<bool> SaveKeyboardsAsync(Dictionary<string, ReplyKeyboardMarkup> keyboards);
 
         /// <summary>
@@ -56,6 +63,12 @@ namespace TelegramSimpleService
         /// <param name="keyboardType">keyboard type</param>
         /// <returns>Dictionary<string, ReplyKeyboardMarkup> or Dictionary<string, InlineKeyboardMarkup></returns>
         object LoadKeyboards(KeyboardType keyboardType);
+
+        /// <summary>
+        /// Method load keyboards with format "Key":"{Btn1}{END()}{Btn2}"
+        /// </summary>
+        /// <returns>dictionary with keyboards</returns>
+        Dictionary<string, ReplyKeyboardMarkup> LoadOneRowKeyboards();
 
         /// <summary>
         /// Method load keyboards from file
