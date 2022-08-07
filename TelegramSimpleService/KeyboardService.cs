@@ -508,16 +508,7 @@ namespace TelegramSimpleService
 
             if (pageMax != 1)
             {
-                if (pageNumber < pageMax)
-                {
-                    List<InlineKeyboardButton> buttons = new List<InlineKeyboardButton>
-                {
-                    new InlineKeyboardButton(backButton.Item1) { CallbackData = $"{backButton.Item2}" },
-                    new InlineKeyboardButton(forwardButton.Item1) { CallbackData = $"{forwardButton.Item2}" }
-                };
-                    rows.Add(buttons);
-                }
-                else if (pageNumber == 1)
+                if (pageNumber == 1)
                 {
                     List<InlineKeyboardButton> buttons = new List<InlineKeyboardButton>
                 {
@@ -530,6 +521,15 @@ namespace TelegramSimpleService
                     List<InlineKeyboardButton> buttons = new List<InlineKeyboardButton>
                 {
                     new InlineKeyboardButton(backButton.Item1) { CallbackData = $"{backButton.Item2}" },
+                };
+                    rows.Add(buttons);
+                }
+                else if (pageNumber < pageMax)
+                {
+                    List<InlineKeyboardButton> buttons = new List<InlineKeyboardButton>
+                {
+                    new InlineKeyboardButton(backButton.Item1) { CallbackData = $"{backButton.Item2}" },
+                    new InlineKeyboardButton(forwardButton.Item1) { CallbackData = $"{forwardButton.Item2}" }
                 };
                     rows.Add(buttons);
                 }
