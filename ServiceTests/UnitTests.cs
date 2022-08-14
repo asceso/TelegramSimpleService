@@ -1,7 +1,9 @@
 ﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Telegram.Bot;
 using Telegram.Bot.Types.ReplyMarkups;
 using TelegramSimpleService;
 
@@ -9,6 +11,7 @@ namespace ServiceTests
 {
     public class UnitTests
     {
+        private static long uidToSend;
         private static string botToken;
         private static ITelegramService telegramService;
         private static IKeyboardService keyboardService;
@@ -16,6 +19,7 @@ namespace ServiceTests
         [SetUp]
         public void Setup()
         {
+            uidToSend = 0123456789;
             botToken = "YOUR_TOKEN";
             telegramService = new TelegramService();
             keyboardService = new KeyboardService();
@@ -166,6 +170,33 @@ namespace ServiceTests
             {
                 Assert.IsTrue(r_keys.Any(r => r.Key == key));
             }
+        }
+
+        [Test]
+        public void SendInlineKeyboard()
+        {
+            TelegramBotClient bot = telegramService.CreateMainBot(botToken);
+
+            var data = new List<Tuple<string, string>>();
+            for (int i = 1; i <= 85; i++)
+            {
+                data.Add(new Tuple<string, string>($"Btn{i}", $"D{i}"));
+            }
+
+            Tuple<string, string> backBtn = new Tuple<string, string>("⬅️", "back");
+            Tuple<string, string> nextBtn = new Tuple<string, string>("➡️", "fwd");
+
+            bot.SendTextMessageAsync(uidToSend, "test page 1", replyMarkup: keyboardService.GeneratePagedInlineKeyboard(
+                data, 1, 6, 2, backBtn, nextBtn))
+                .Wait();
+
+            bot.SendTextMessageAsync(uidToSend, "test page 2", replyMarkup: keyboardService.GeneratePagedInlineKeyboard(
+                data, 2, 6, 2, backBtn, nextBtn))
+                .Wait();
+
+            bot.SendTextMessageAsync(uidToSend, "test page 15", replyMarkup: keyboardService.GeneratePagedInlineKeyboard(
+                data, 15, 6, 2, backBtn, nextBtn))
+                .Wait();
         }
     }
 }

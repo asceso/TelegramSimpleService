@@ -469,12 +469,12 @@ namespace TelegramSimpleService
         public InlineKeyboardMarkup GeneratePagedInlineKeyboard(List<Tuple<string, string>> tupleTextData,
                                                                 int pageNumber,
                                                                 int countInPage,
+                                                                int collums,
                                                                 Tuple<string, string> backButton,
                                                                 Tuple<string, string> forwardButton)
         {
             List<List<InlineKeyboardButton>> rows = new List<List<InlineKeyboardButton>>();
 
-            int rowCount = 0;
             int pageMax = tupleTextData.Count / countInPage;
             if (tupleTextData.Count - (pageMax * countInPage) > 0)
             {
@@ -489,21 +489,31 @@ namespace TelegramSimpleService
                 pageNumber = 1;
             }
 
+            List<InlineKeyboardButton> singleRow = new List<InlineKeyboardButton>();
+            int elementCounter = 0;
+            int collumnCounter = 0;
             foreach (var item in tupleTextData.Skip((pageNumber - 1) * countInPage))
             {
-                List<InlineKeyboardButton> buttons = new List<InlineKeyboardButton>
+                singleRow.Add(new InlineKeyboardButton(item.Item1)
                 {
-                    new InlineKeyboardButton(item.Item1)
-                    {
-                        CallbackData = $"{item.Item2}",
-                    }
-                };
-                rows.Add(buttons);
-                rowCount++;
-                if (rowCount >= countInPage)
+                    CallbackData = item.Item2
+                });
+                collumnCounter++;
+                elementCounter++;
+                if (collumnCounter >= collums)
+                {
+                    rows.Add(singleRow.ToList());
+                    singleRow = new List<InlineKeyboardButton>();
+                    collumnCounter = 0;
+                }
+                if (elementCounter >= countInPage)
                 {
                     break;
                 }
+            }
+            if (singleRow.Any())
+            {
+                rows.Add(singleRow.ToList());
             }
 
             if (pageMax != 1)

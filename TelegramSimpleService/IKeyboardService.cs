@@ -96,6 +96,7 @@ namespace TelegramSimpleService
         InlineKeyboardMarkup GeneratePagedInlineKeyboard(List<Tuple<string, string>> tupleTextData,
                                                          int pageNumber,
                                                          int countInPage,
+                                                         int collums,
                                                          Tuple<string, string> backButton,
                                                          Tuple<string, string> forwardButton);
     }
