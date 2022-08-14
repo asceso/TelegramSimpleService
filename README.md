@@ -211,11 +211,11 @@ InlineKeyboardMarkup keyboard = keyboardService.GenerateInlineKeyboard(myCollect
 При указании страницы вне допустимого значения выбирается первая или последняя страница, к примеру страниц 5 при вводе страницы 7 будет загрузка страницы 5
 
 ```C#
-//Загрузка страницы 1, кол-во элементов на странице 5
-InlineKeyboardMarkup keyboard = keyboardService.GeneratePagedInlineKeyboard(myCollection, 1, 5, new Tuple<string, string>("Btn1", "Back"), new Tuple<string, string>("Btn2", "Forward"));
+//Загрузка страницы 1, кол-во элементов на странице 5, кол - во столбцов 2
+InlineKeyboardMarkup keyboard = keyboardService.GeneratePagedInlineKeyboard(myCollection, 1, 5, 2, new Tuple<string, string>("Btn1", "Back"), new Tuple<string, string>("Btn2", "Forward"));
 
-//Загрузка страницы 3, кол-во элементов на странице 5
-InlineKeyboardMarkup keyboard = keyboardService.GeneratePagedInlineKeyboard(myCollection, 3, 5, new Tuple<string, string>("Btn1", "Back"), new Tuple<string, string>("Btn2", "Forward"));
+//Загрузка страницы 3, кол-во элементов на странице 5, кол - во столбцов 1
+InlineKeyboardMarkup keyboard = keyboardService.GeneratePagedInlineKeyboard(myCollection, 3, 5, 1, new Tuple<string, string>("Btn1", "Back"), new Tuple<string, string>("Btn2", "Forward"));
 ```
 
 С версии 1.0.7.0 доступны методы
